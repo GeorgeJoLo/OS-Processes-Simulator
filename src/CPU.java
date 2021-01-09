@@ -21,6 +21,8 @@ public class CPU {
         /* TODO: you need to add some code here
          * Hint: you need to run tick() in a loop, until there is nothing else to do... */
 
+        /* FOR SCHEDULER
+            Remember to always execute scheduler.addProcess before scheduler.getNextProcess
     }
     
     public void tick() {
