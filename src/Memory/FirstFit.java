@@ -16,7 +16,20 @@ public class FirstFit extends MemoryAllocationAlgorithm {
          * Hint: this should return the memory address where the process was
          * loaded into if the process fits. In case the process doesn't fit, it
          * should return -1. */
-        while (true) break;
+
+        //Calculate last byte address
+        int lastByte = 0;
+        for (int block : availableBlockSizes)
+            lastByte += block; //ATTENTION! last byte is out of bounds
+
+        //Iterate all bytes and try to locate the process
+        for (int i = 0; i < lastByte; i++) {
+            if (emptySpaceAhead(i, currentlyUsedMemorySlots) > p.getMemoryRequirements()) {
+                address = i;
+                currentlyUsedMemorySlots.add(placeProcess(i, p.getMemoryRequirements()));
+                break;
+            }
+        }
 
         return address;
     }
