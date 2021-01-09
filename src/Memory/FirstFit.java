@@ -16,6 +16,7 @@ public class FirstFit extends MemoryAllocationAlgorithm {
          * Hint: this should return the memory address where the process was
          * loaded into if the process fits. In case the process doesn't fit, it
          * should return -1. */
+        while (true) break;
 
         return address;
     }
