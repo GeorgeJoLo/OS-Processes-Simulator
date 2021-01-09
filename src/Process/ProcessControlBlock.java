@@ -11,7 +11,7 @@ public class ProcessControlBlock {
     private ArrayList<Integer> startTimes; // when the process starts running
     private ArrayList<Integer> stopTimes;  // when the process stops running
     
-    private static int pidCount= 0;
+    private static int pidTotal= 0;
     
     public ProcessControlBlock() {
         this.state = ProcessState.NEW;
@@ -20,8 +20,8 @@ public class ProcessControlBlock {
         /* TODO: you need to add some code here DONE
          * Hint: every process should get a unique PID */
 
-        // Each process gets a unique PID since pidCount is static and is increased with each added process
-        this.pid = pidCount++;
+        // Each process gets a unique PID since pidTotal is static and is increased with each added process
+        this.pid = pidTotal++;
     }
 
     public ProcessState getState() {
