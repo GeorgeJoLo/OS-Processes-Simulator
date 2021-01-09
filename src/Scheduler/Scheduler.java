@@ -20,7 +20,9 @@ public abstract class Scheduler {
      * schedulers. */
     public void removeProcess(Process p) {
         /* TODO: you need to add some code here */
-        
+
+        // Remove the process from the queue
+        this.processes.remove(p);
     }
     
     /* the getNextProcess() method should return the process that should

@@ -21,6 +21,7 @@ public class Process {
         /* TODO: you need to add some code here
          * Hint: this should run every time a process starts running */
 
+        // Every time the process runs, reduce its burst time by 1
         this.burstTime -= 1;
     }
     
@@ -33,6 +34,7 @@ public class Process {
         /* TODO: you need to add some code here
          * and change the return value */
 
+        // Calculate the waiting time of a process
         double sum = this.getResponseTime();
 
         for (int i = 1; i < this.pcb.getStartTimes().size(); i++) {
@@ -45,12 +47,16 @@ public class Process {
     public double getResponseTime() {
         /* TODO: you need to add some code here
          * and change the return value */
+
+        // Return the response time of a process
         return this.pcb.getStartTimes().get(0) - this.arrivalTime;
     }
     
     public double getTurnAroundTime() {
         /* TODO: you need to add some code here
          * and change the return value */
+
+        // Return the turn around time of a process
         return this.pcb.getStopTimes().get(pcb.getStopTimes().size() - 1) - this.arrivalTime;
     }
 
