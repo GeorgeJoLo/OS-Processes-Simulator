@@ -26,7 +26,7 @@ public class NextFit extends MemoryAllocationAlgorithm {
 
         //Iterate all bytes from startSearch until the end and try to locate the process
         for (int i = startSearch; i < lastByte; i++) {
-            if (emptySpaceAhead(i, currentlyUsedMemorySlots) > p.getMemoryRequirements()) {
+            if (emptySpaceAhead(i, currentlyUsedMemorySlots) >= p.getMemoryRequirements()) {
                 fit = true;
                 address = i;
                 startSearch = i + p.getMemoryRequirements();
@@ -38,7 +38,7 @@ public class NextFit extends MemoryAllocationAlgorithm {
         //Iterate all bytes from start until startSearch and try to locate the process
         if (!fit)
             for (int i = 0; i < startSearch; i++) {
-                if (emptySpaceAhead(i, currentlyUsedMemorySlots) > p.getMemoryRequirements()) {
+                if (emptySpaceAhead(i, currentlyUsedMemorySlots) >= p.getMemoryRequirements()) {
                     fit = true;
                     address = i;
                     startSearch = i + p.getMemoryRequirements();
