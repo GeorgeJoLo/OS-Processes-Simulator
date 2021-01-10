@@ -43,7 +43,7 @@ public class RoundRobin extends Scheduler {
 
         // If the quantum time of the current process has ended
         if (quantumExecutionIndex == quantum) {
-            // Move the last executed process from the from to the back of the queue
+            // Move the last executed process from the front to the back of the queue
             Process currentExecutingProcess = this.processes.get(0);
             this.processes.remove(currentExecutingProcess);
             this.processes.add(currentExecutingProcess);

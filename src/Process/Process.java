@@ -26,7 +26,11 @@ public class Process {
         // Every time the process runs, reduce its burst time by 1
         this.burstTime -= 1;
     }
-    
+
+    public int getBurstTime() {
+        return burstTime;
+    }
+
     public void waitInBackground() {
         /* TODO: you need to add some code here
          * Hint: this should run every time a process stops running */
