@@ -34,6 +34,12 @@ public abstract class MemoryAllocationAlgorithm {
         return rightBound - pointer;
     }
 
+    /**
+     * Create a process with a certain size, in a certain point
+     * @param start the start of the process
+     * @param size  the size of the process
+     * @return a MemorySlot with the appropriate fields
+     */
     protected MemorySlot placeProcess( int start , int size ){
         int blockToPlaceProcess = allocateBlock(start);
         int blockStart = calculateBlockStart( blockToPlaceProcess);
@@ -64,7 +70,7 @@ public abstract class MemoryAllocationAlgorithm {
         return start;
     }
 
-    private int calculateBlockEnd(int blockId){
+    protected int calculateBlockEnd(int blockId){
         int end = 0;
         for(int i = 0; i < blockId; i++){
             end += availableBlockSizes[i];
