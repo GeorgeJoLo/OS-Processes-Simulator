@@ -6,7 +6,7 @@ import Process.Process;
 public abstract class MemoryAllocationAlgorithm {
 
     protected final int[] availableBlockSizes;
-    
+
     public MemoryAllocationAlgorithm(int[] availableBlockSizes) {
         this.availableBlockSizes = availableBlockSizes;
     }
@@ -24,11 +24,11 @@ public abstract class MemoryAllocationAlgorithm {
         if (!isFree(pointer, currentlyUsedMemorySlots)) return 0;
 
         //Find the end of the block the pointer is
-        int rightBound = calculateBlockEnd(allocateBlock(pointer));
+        int rightBound = calculateBlockEnd(allocateBlock(pointer)) + 1;
 
         //Find the closest, to the pointer, MemorySlot inside the block
         for (MemorySlot x : currentlyUsedMemorySlots)
-            if (x.getStart() < rightBound)
+            if (x.getStart() < rightBound && x.getStart() > pointer)
                 rightBound = x.getStart();
 
         return rightBound - pointer;
@@ -38,17 +38,17 @@ public abstract class MemoryAllocationAlgorithm {
         int blockToPlaceProcess = allocateBlock(start);
         int blockStart = calculateBlockStart( blockToPlaceProcess);
         int blockEnd   = calculateBlockEnd( blockToPlaceProcess);
-        return new MemorySlot(start, start + size, blockStart , blockEnd);
+        return new MemorySlot(start, start + size - 1, blockStart , blockEnd);
     }
 
 
 
     private int allocateBlock(int start){
         int blockId = 0;
-        int currentSize = -1;
+        int currentSize = 0;
         for(int blockSize: availableBlockSizes){
             currentSize += blockSize;
-            if(start < blockSize){
+            if(start < currentSize){
                 return blockId;
             }
             blockId += 1;
@@ -69,12 +69,13 @@ public abstract class MemoryAllocationAlgorithm {
         for(int i = 0; i < blockId; i++){
             end += availableBlockSizes[i];
         }
+        end += availableBlockSizes[blockId] - 1;
         return end;
     }
 
     private boolean isFree(int slot, ArrayList<MemorySlot> currentlyUsedMemorySlots) {
         for (MemorySlot x : currentlyUsedMemorySlots)
-            if (x.getStart() < slot && x.getEnd() < slot)
+            if (x.getStart() <= slot && x.getEnd() >= slot)
                 return false;
         return true;
     }

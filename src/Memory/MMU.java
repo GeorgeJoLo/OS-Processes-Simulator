@@ -1,6 +1,7 @@
 package Memory;
 
 import java.util.ArrayList;
+
 import Process.Process;
 import Process.ProcessState;
 
@@ -9,7 +10,7 @@ public class MMU {
     private final int[] availableBlockSizes;
     private MemoryAllocationAlgorithm algorithm;
     private ArrayList<MemorySlot> currentlyUsedMemorySlots;
-    private ArrayList<ProcessSlot> processSlots;
+    private ArrayList<ProcessSlot> processSlots = new ArrayList<>();
 
     static class ProcessSlot {
         private Process process;
@@ -20,16 +21,13 @@ public class MMU {
             this.slot = slot;
         }
 
-        MemorySlot getSlot() { return slot; }
-
         ProcessState getProcessState() { return process.getPCB().getState(); }
     }
-    
+
     public MMU(int[] availableBlockSizes, MemoryAllocationAlgorithm algorithm) {
         this.availableBlockSizes = availableBlockSizes;
         this.algorithm = algorithm;
         currentlyUsedMemorySlots = new ArrayList<>();
-        processSlots = new ArrayList<>();
     }
 
     public boolean loadProcessIntoRAM(Process p) {
@@ -41,9 +39,10 @@ public class MMU {
          * Also, this need to check for toDelete Processes*/
         if (algorithm.fitProcess(p, currentlyUsedMemorySlots) != -1) {
             fit = true;
-            //processSlots.add(new ProcessSlot())
+            processSlots.add(new ProcessSlot(p, currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1)));
         }
-        
+
+        System.out.println(fit);
         return fit;
     }
 
@@ -52,10 +51,49 @@ public class MMU {
      * if a process has been terminated, frees the allocated slot
      */
     private void freeMemory() {
-        for (ProcessSlot ps : processSlots)
-            if (ps.getProcessState() == ProcessState.TERMINATED) {
+        for (int i = 0; i < processSlots.size(); i++)
+            if (processSlots.get(i).getProcessState() == ProcessState.TERMINATED) {
                 /* TODO: you need to add some code here
                  * Hint: This should free the memory allocated by ps*/
+                currentlyUsedMemorySlots.remove(processSlots.get(i).slot);
+                processSlots.remove(i);
+                i--;
             }
+    }
+
+    public static void main(String[] args) {
+        int[] blocks = {20, 5, 10};
+        MemoryAllocationAlgorithm algorithm = new FirstFit(blocks);
+        MMU mmu = new MMU(blocks, algorithm);
+
+        Process a = new Process(0, 1, 3);
+        Process b = new Process(1, 1, 8);
+        Process c = new Process(1, 1, 10);
+        Process d = new Process(1, 1, 10);
+        Process e = new Process(1, 1, 2);
+
+        mmu.loadProcessIntoRAM(a);
+        mmu.printSlots();
+        mmu.loadProcessIntoRAM(b);
+        mmu.printSlots();
+        mmu.loadProcessIntoRAM(c);
+        mmu.printSlots();
+        mmu.loadProcessIntoRAM(d);
+        mmu.printSlots();
+        a.getPCB().setState(ProcessState.TERMINATED, 5);
+        mmu.loadProcessIntoRAM(e);
+        mmu.printSlots();
+
+    }
+
+    void printSlots() {
+        System.out.print("Used Slots: ");
+        if (currentlyUsedMemorySlots.isEmpty()) System.out.println("None");
+        else {
+            for (MemorySlot x : currentlyUsedMemorySlots) {
+                System.out.print(x.getStart() + "-" + x.getEnd() + ", ");
+            }
+            System.out.println();
+        }
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import Process.Process;
 
 public class FirstFit extends MemoryAllocationAlgorithm {
-    
+
     public FirstFit(int[] availableBlockSizes) {
         super(availableBlockSizes);
     }
@@ -24,7 +24,7 @@ public class FirstFit extends MemoryAllocationAlgorithm {
 
         //Iterate all bytes and try to locate the process
         for (int i = 0; i < lastByte; i++) {
-            if (emptySpaceAhead(i, currentlyUsedMemorySlots) > p.getMemoryRequirements()) {
+            if (emptySpaceAhead(i, currentlyUsedMemorySlots) >= p.getMemoryRequirements()) {
                 address = i;
                 currentlyUsedMemorySlots.add(placeProcess(i, p.getMemoryRequirements()));
                 break;
