@@ -32,6 +32,12 @@ public class MMU {
 
     public boolean loadProcessIntoRAM(Process p) {
         freeMemory();
+
+        if (p.getMemoryRequirements() > max()) {
+            p.getPCB().setState(ProcessState.TERMINATED, -1);
+            return false;
+        }
+
         boolean fit = false;
         /* TODO: you need to add some code here
          * Hint: this should return true if the process was able to fit into memory
@@ -42,7 +48,8 @@ public class MMU {
             processSlots.add(new ProcessSlot(p, currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1)));
         }
 
-        System.out.println(fit);
+        System.out.print("Process ID: " + p.getPCB().getPid() + " | ");
+        printSlots();
         return fit;
     }
 
@@ -95,5 +102,16 @@ public class MMU {
             }
             System.out.println();
         }
+    }
+
+    int max () {
+        int returnMax = availableBlockSizes[0];
+        for (int memoryBlockSize : availableBlockSizes) {
+            if (memoryBlockSize > returnMax) {
+                returnMax = memoryBlockSize;
+            }
+        }
+
+        return returnMax;
     }
 }

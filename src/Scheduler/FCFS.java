@@ -1,5 +1,7 @@
 package Scheduler;
 
+import Process.Process;
+
 public class FCFS extends Scheduler {
 
     public FCFS() {
