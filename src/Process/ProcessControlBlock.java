@@ -11,7 +11,7 @@ public class ProcessControlBlock {
     private ArrayList<Integer> startTimes; // when the process starts running
     private ArrayList<Integer> stopTimes;  // when the process stops running
     
-    private static int pidTotal= 0;
+    private static int pidTotal= 1;
     
     public ProcessControlBlock() {
         this.state = ProcessState.NEW;

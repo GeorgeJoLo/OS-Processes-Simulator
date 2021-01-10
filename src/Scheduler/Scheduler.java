@@ -2,6 +2,8 @@ package Scheduler;
 
 import java.util.ArrayList;
 
+import Process.Process;
+
 public abstract class Scheduler {
 
     protected ArrayList<Process> processes; // the list of processes to be executed

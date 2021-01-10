@@ -1,16 +1,20 @@
 package Scheduler;
 
+import Process.Process;
+
 public class RoundRobin extends Scheduler {
 
     private int quantum;
     private int quantumExecutionIndex;
+
+    private Process runningProcess;
     
     public RoundRobin() {
         this.quantum = 1; // default quantum
         /* TODO: you _may_ need to add some code here */
 
         // Used to indicate the quantum progress for the current executing process
-        quantumExecutionIndex = 1;
+        quantumExecutionIndex = 0;
     }
     
     public RoundRobin(int quantum) {
@@ -22,6 +26,10 @@ public class RoundRobin extends Scheduler {
         /* TODO: you need to add some code here */
 
         // Add the process to the end of the queue
+        if (quantumExecutionIndex == 0) {
+            runningProcess = p;
+        }
+
         this.processes.add(p);
     }
     
@@ -41,8 +49,12 @@ public class RoundRobin extends Scheduler {
             this.processes.add(currentExecutingProcess);
 
             quantumExecutionIndex = 1;
-        } else {
+            runningProcess = this.processes.get(0);
+        } else if (quantumExecutionIndex < quantum && this.processes.get(0) == runningProcess) {
             quantumExecutionIndex++;
+        } else {
+            quantumExecutionIndex = 1;
+            runningProcess = this.processes.get(0);
         }
 
         // Return the process at the front of the queue

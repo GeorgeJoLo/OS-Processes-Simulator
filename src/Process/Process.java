@@ -5,6 +5,8 @@ public class Process {
     private int arrivalTime;
     private int burstTime;
     private int memoryRequirements;
+
+    private int startWaitingTime = -1;
     
     public Process(int arrivalTime, int burstTime, int memoryRequirements) {
         this.arrivalTime = arrivalTime;
@@ -35,7 +37,7 @@ public class Process {
          * and change the return value */
 
         // Calculate the waiting time of a process
-        double sum = this.getResponseTime();
+        double sum = this.pcb.getStartTimes().get(0) - this.startWaitingTime;
 
         for (int i = 1; i < this.pcb.getStartTimes().size(); i++) {
             sum += this.pcb.getStartTimes().get(i) - this.pcb.getStopTimes().get(i - 1);
@@ -62,5 +64,18 @@ public class Process {
 
     public int getMemoryRequirements() {
         return memoryRequirements;
+    }
+
+    public int getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public int getBurstTime() {
+        return burstTime;
+    }
+
+
+    public void setStartWaitingTime(int startWaitingTime) {
+        this.startWaitingTime = startWaitingTime;
     }
 }

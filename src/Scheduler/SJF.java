@@ -1,5 +1,7 @@
 package Scheduler;
 
+import Process.Process;
+
 public class SJF extends Scheduler {
 
     public SJF() {
