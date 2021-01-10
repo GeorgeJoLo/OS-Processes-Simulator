@@ -63,7 +63,10 @@ public class MMU {
 
     public static void main(String[] args) {
         int[] blocks = {20, 5, 10};
-        MemoryAllocationAlgorithm algorithm = new FirstFit(blocks);
+        //MemoryAllocationAlgorithm algorithm = new FirstFit(blocks);
+        //MemoryAllocationAlgorithm algorithm = new NextFit(blocks);
+        //MemoryAllocationAlgorithm algorithm = new BestFit(blocks);
+        MemoryAllocationAlgorithm algorithm = new WorstFit(blocks);
         MMU mmu = new MMU(blocks, algorithm);
 
         Process a = new Process(0, 1, 3);
