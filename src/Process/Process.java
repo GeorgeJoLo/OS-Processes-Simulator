@@ -27,10 +27,6 @@ public class Process {
         this.burstTime -= 1;
     }
 
-    public int getBurstTime() {
-        return burstTime;
-    }
-
     public void waitInBackground() {
         /* TODO: you need to add some code here
          * Hint: this should run every time a process stops running */
