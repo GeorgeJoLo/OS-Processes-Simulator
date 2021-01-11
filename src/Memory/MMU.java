@@ -48,8 +48,13 @@ public class MMU {
             processSlots.add(new ProcessSlot(p, currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1)));
         }
 
-        System.out.print("Process ID: " + p.getPCB().getPid() + " | ");
-        printSlots();
+        if (fit) {
+            System.out.print("Process ID: " + p.getPCB().getPid() + " | ");
+            printSlots();
+        } else {
+            System.out.println("Process ID: " + p.getPCB().getPid() + " could not fit.");
+        }
+
         return fit;
     }
 
