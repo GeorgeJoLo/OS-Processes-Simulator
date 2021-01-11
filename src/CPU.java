@@ -107,6 +107,11 @@ public class CPU {
                     newProcesses[i].getPCB().setState(ProcessState.READY, clock);
                     newProcesses[i].setStartWaitingTime(clock);
                     scheduler.addProcess(newProcesses[i]);
+
+                    Process temp = newProcesses[i];
+                    newProcesses[i] = newProcesses[newProcessesStartIndex];
+                    newProcesses[newProcessesStartIndex] = temp;
+
                     newProcessesStartIndex++;
                     break;
                 }
