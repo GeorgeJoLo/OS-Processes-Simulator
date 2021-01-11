@@ -14,6 +14,18 @@ public class PC {
                 new Process(2, 2, 40),
                 new Process(3, 1, 25),
                 new Process(4, 3, 30)
+
+//                new Process(0, 6, 0),
+//                new Process(1, 2, 0),
+//                new Process(2, 1, 0),
+//                new Process(5, 3, 0),
+//                new Process(7, 4, 0),
+
+//                new Process(1, 8, 0),
+//                new Process(2, 4, 0),
+//                new Process(3, 9, 0),
+//                new Process(4, 5, 0)
+
         };
         final int[] availableBlockSizes = {15, 40, 10, 20}; // sizes in kB
         MemoryAllocationAlgorithm algorithm = new FirstFit(availableBlockSizes);

@@ -74,6 +74,12 @@ public class CPU {
             }
         }
 
+        if (newProcessesEndIndex == 0) {
+            System.out.println("NOOP");
+            System.out.println("===========================================");
+            return;
+        }
+
         // Get the previously run process and the new process to run
         Process previousProcess = this.findProcessById(currentProcess);
 

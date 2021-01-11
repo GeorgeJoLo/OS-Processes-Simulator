@@ -1,6 +1,7 @@
 package Scheduler;
 
 import Process.Process;
+import Process.ProcessState;
 
 public class RoundRobin extends Scheduler {
 
@@ -42,12 +43,15 @@ public class RoundRobin extends Scheduler {
             return null;
 
         // If the quantum time of the current process has ended
-        if (quantumExecutionIndex == quantum) {
-            // Move the last executed process from the from to the back of the queue
+        if (quantumExecutionIndex == quantum && runningProcess.getPCB().getState() != ProcessState.TERMINATED) {
+            // Move the last executed process from the front to the back of the queue
             Process currentExecutingProcess = this.processes.get(0);
             this.processes.remove(currentExecutingProcess);
             this.processes.add(currentExecutingProcess);
 
+            quantumExecutionIndex = 1;
+            runningProcess = this.processes.get(0);
+        } else if (quantumExecutionIndex == quantum && runningProcess.getPCB().getState() == ProcessState.TERMINATED) {
             quantumExecutionIndex = 1;
             runningProcess = this.processes.get(0);
         } else if (quantumExecutionIndex < quantum && this.processes.get(0) == runningProcess) {
@@ -56,6 +60,11 @@ public class RoundRobin extends Scheduler {
             quantumExecutionIndex = 1;
             runningProcess = this.processes.get(0);
         }
+
+        for (Process process : this.processes) {
+            System.out.print(process.getPCB().getPid() + ", ");
+        }
+        System.out.println();
 
         // Return the process at the front of the queue
         return this.processes.get(0);
