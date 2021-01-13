@@ -52,9 +52,11 @@ public class RoundRobin extends Scheduler {
             quantumExecutionIndex = 1;
             runningProcess = this.processes.get(0);
         } else if (quantumExecutionIndex == quantum && runningProcess.getPCB().getState() == ProcessState.TERMINATED) {
+            // If the quantum of a process has ended and the process has TERMINATED
             quantumExecutionIndex = 1;
             runningProcess = this.processes.get(0);
         } else if (quantumExecutionIndex < quantum && this.processes.get(0) == runningProcess) {
+            // Increase the process quantum of the current process
             quantumExecutionIndex++;
         } else {
             quantumExecutionIndex = 1;
