@@ -1,7 +1,7 @@
 package Memory;
 
-import java.util.ArrayList;
 import Process.Process;
+import java.util.ArrayList;
 
 public class WorstFit extends MemoryAllocationAlgorithm {
     

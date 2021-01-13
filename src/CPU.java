@@ -36,7 +36,6 @@ public class CPU {
         currentProcess = 0;
 
         // Run tick until there are no processes left to run or fit into RAM
-        // TODO : TERMINATE a process that doesn't fit in RAM (inside MMU)
         while (!this.allProcessesTerminated()) {
             tick();
             clock++;
@@ -74,12 +73,6 @@ public class CPU {
             }
         }
 
-        if (newProcessesEndIndex == 0) {
-            System.out.println("NOOP");
-            System.out.println("===========================================");
-            return;
-        }
-
         // Get the previously run process and the new process to run
         Process previousProcess = this.findProcessById(currentProcess);
 
@@ -92,6 +85,7 @@ public class CPU {
             }
         }
 
+        // Check if all processes are TERMINATED
         if (this.allProcessesTerminated()){
             System.out.println("NOOP");
             System.out.println();
@@ -118,7 +112,15 @@ public class CPU {
             }
         }
 
+        // Get the next process to run from scheduler
         Process newProcess = scheduler.getNextProcess();
+
+        // If there is no new process to run skip the clock cycle
+        if (newProcess == null) {
+            System.out.println("NOOP");
+            System.out.println("===========================================");
+            return;
+        }
 
         // If its the first process
         if (
@@ -139,7 +141,9 @@ public class CPU {
         currentProcess = newProcess.getPCB().getPid();
     }
 
-    // Check if there are still processes left to RUN
+    /**
+     * Check if there are still processes left to RUN
+     */
     private boolean allProcessesTerminated() {
        for (Process process : processes) {
            if (process.getPCB().getState() != ProcessState.TERMINATED)

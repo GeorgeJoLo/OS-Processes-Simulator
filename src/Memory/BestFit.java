@@ -2,9 +2,9 @@ package Memory;
 
 import Memory.MemoryAllocationAlgorithm;
 import Memory.MemorySlot;
+import Process.Process;
 
 import java.util.ArrayList;
-import Process.Process;
 
 public class BestFit extends MemoryAllocationAlgorithm {
     

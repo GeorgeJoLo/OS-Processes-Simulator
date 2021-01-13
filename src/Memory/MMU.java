@@ -1,9 +1,9 @@
 package Memory;
 
-import java.util.ArrayList;
-
 import Process.Process;
 import Process.ProcessState;
+
+import java.util.ArrayList;
 
 public class MMU {
 

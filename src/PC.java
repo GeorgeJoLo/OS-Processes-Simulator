@@ -10,7 +10,7 @@ public class PC {
         
         final Process[] processes = {
                 // Process.Process parameters are: arrivalTime, burstTime, memoryRequirements (kB)
-                new Process(0, 5, 10),
+                new Process(1, 1, 10),
                 new Process(2, 2, 40),
                 new Process(3, 1, 5),
                 new Process(4, 3, 20)
@@ -27,10 +27,15 @@ public class PC {
 //                new Process(4, 5, 0)
 
         };
+
         final int[] availableBlockSizes = {15, 40, 10, 20}; // sizes in kB
+
         MemoryAllocationAlgorithm algorithm = new FirstFit(availableBlockSizes);
+
         MMU mmu = new MMU(availableBlockSizes, algorithm);
+
         Scheduler scheduler = new FCFS();
+
         CPU cpu = new CPU(scheduler, mmu, processes);
         cpu.run();
     }
