@@ -10,8 +10,13 @@ public class MMU {
     private final int[] availableBlockSizes;
     private MemoryAllocationAlgorithm algorithm;
     private ArrayList<MemorySlot> currentlyUsedMemorySlots;
-    private ArrayList<ProcessSlot> processSlots = new ArrayList<>();
+    private ArrayList<ProcessSlot> processSlots = new ArrayList<>();   // here we store the slots that are
+                                                                       // occupied by every process
 
+    /**
+     * A ProcessSlot is the MemorySlot (slot) that stores
+     * a specific Process (process)
+     */
     static class ProcessSlot {
         private Process process;
         private MemorySlot slot;
@@ -21,33 +26,46 @@ public class MMU {
             this.slot = slot;
         }
 
+        /**
+         * @return the state of the process stored in slot
+         */
         ProcessState getProcessState() { return process.getPCB().getState(); }
     }
 
     public MMU(int[] availableBlockSizes, MemoryAllocationAlgorithm algorithm) {
         this.availableBlockSizes = availableBlockSizes;
         this.algorithm = algorithm;
-        currentlyUsedMemorySlots = new ArrayList<>();
+        this.currentlyUsedMemorySlots = new ArrayList<>();
     }
 
+    /**
+     * Tries to fit the Process p to the given RAM (availableBlocks)
+     * @param p a Process need to be stored into RAM
+     * @return true if p fits into RAM
+     */
     public boolean loadProcessIntoRAM(Process p) {
-        freeMemory();
-
-        if (p.getMemoryRequirements() > max()) {
-            p.getPCB().setState(ProcessState.TERMINATED, -1);
-            return false;
-        }
-
         boolean fit = false;
         /* TODO: you need to add some code here
          * Hint: this should return true if the process was able to fit into memory
          * and false if not
          * Also, this need to check for toDelete Processes*/
+
+        // Delete all terminated processes
+        freeMemory();
+
+        // Check if process can fit in RAM if it's empty
+        if (p.getMemoryRequirements() > max()) {
+            p.getPCB().setState(ProcessState.TERMINATED, -1);
+            return false;
+        }
+
+        // Try to fit the process p into RAM
         if (algorithm.fitProcess(p, currentlyUsedMemorySlots) != -1) {
             fit = true;
             processSlots.add(new ProcessSlot(p, currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1)));
         }
 
+        // Auxiliary print
         if (fit) {
             System.out.print("Process ID: " + p.getPCB().getPid() + " | ");
             printSlots();
@@ -73,45 +91,9 @@ public class MMU {
             }
     }
 
-    public static void main(String[] args) {
-        int[] blocks = {20, 5, 10};
-        //MemoryAllocationAlgorithm algorithm = new FirstFit(blocks);
-        //MemoryAllocationAlgorithm algorithm = new NextFit(blocks);
-        //MemoryAllocationAlgorithm algorithm = new BestFit(blocks);
-        MemoryAllocationAlgorithm algorithm = new WorstFit(blocks);
-        MMU mmu = new MMU(blocks, algorithm);
-
-        Process a = new Process(0, 1, 3);
-        Process b = new Process(1, 1, 8);
-        Process c = new Process(1, 1, 10);
-        Process d = new Process(1, 1, 10);
-        Process e = new Process(1, 1, 2);
-
-        mmu.loadProcessIntoRAM(a);
-        mmu.printSlots();
-        mmu.loadProcessIntoRAM(b);
-        mmu.printSlots();
-        mmu.loadProcessIntoRAM(c);
-        mmu.printSlots();
-        mmu.loadProcessIntoRAM(d);
-        mmu.printSlots();
-        a.getPCB().setState(ProcessState.TERMINATED, 5);
-        mmu.loadProcessIntoRAM(e);
-        mmu.printSlots();
-
-    }
-
-    void printSlots() {
-        System.out.print("Used Slots: ");
-        if (currentlyUsedMemorySlots.isEmpty()) System.out.println("None");
-        else {
-            for (MemorySlot x : currentlyUsedMemorySlots) {
-                System.out.print(x.getStart() + "-" + x.getEnd() + ", ");
-            }
-            System.out.println();
-        }
-    }
-
+    /**
+     * @return the size of the max available block
+     */
     int max () {
         int returnMax = availableBlockSizes[0];
         for (int memoryBlockSize : availableBlockSizes) {
@@ -121,5 +103,19 @@ public class MMU {
         }
 
         return returnMax;
+    }
+
+    /**
+     * Auxiliary print
+     */
+    void printSlots() {
+        System.out.print("Used Slots: ");
+        if (currentlyUsedMemorySlots.isEmpty()) System.out.println("None");
+        else {
+            for (MemorySlot x : currentlyUsedMemorySlots) {
+                System.out.print(x.getStart() + "-" + x.getEnd() + ", ");
+            }
+            System.out.println();
+        }
     }
 }

@@ -70,6 +70,10 @@ public abstract class MemoryAllocationAlgorithm {
         return start;
     }
 
+    /**
+     * @param blockId the index of a block from the availableBlocks
+     * @return the last byte of this block
+     */
     protected int calculateBlockEnd(int blockId){
         int end = 0;
         for(int i = 0; i < blockId; i++){

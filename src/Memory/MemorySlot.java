@@ -9,7 +9,7 @@ public class MemorySlot {
     /* The following should always hold true:
      * start >= blockStart
      * end <= blockEnd */
-    
+
     public MemorySlot(int start, int end, int blockStart, int blockEnd) {
         if ((start < blockStart) || (end > blockEnd)) {
             throw new java.lang.RuntimeException("Memory access out of bounds.");
