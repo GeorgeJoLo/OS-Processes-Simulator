@@ -1,3 +1,5 @@
+package CPU;
+
 import Memory.MMU;
 import Scheduler.Scheduler;
 import Process.Process;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 
 public class CPU {
 
-    public static int clock = 0; // this should be incremented on every CPU cycle
+    public static int clock = 0; // this should be incremented on every CPU.CPU cycle
     
     private Scheduler scheduler;
     private MMU mmu;
@@ -51,11 +53,14 @@ public class CPU {
             System.out.println("\tTurn around Time: " + process.getTurnAroundTime());
 
         }
+
+        // Reset clock at the end of the cpu run so tests can run properly
+        clock = 0;
     }
     
     public void tick() {
         /* TODO: you need to add some code here
-         * Hint: this method should run once for every CPU cycle */
+         * Hint: this method should run once for every CPU.CPU cycle */
 
         System.out.println("Clock: " + clock);
 
@@ -64,10 +69,10 @@ public class CPU {
             if (process.getArrivalTime() == clock)
                 processesToLoad.add(process);
 
-        // Get the previously run process and the new process to run
+        // Get the previously run process
         Process previousProcess = this.findProcessById(currentProcess);
 
-        // If its not the first process and previousProcess has terminated
+        // If previousProcess has terminated
         if (previousProcess != null && previousProcess.getBurstTime() == 0) {
             previousProcess.getPCB().setState(ProcessState.TERMINATED, clock);
             scheduler.removeProcess(previousProcess);
@@ -81,17 +86,20 @@ public class CPU {
 
         // Check if there are NEW processes (arrived now / could not fit into RAM previously)
         // Load the first process from the waiting list
-        for (Process p : processesToLoad)
+        for (int i = 0; i < processesToLoad.size(); i++) {
+            Process p = processesToLoad.get(i);
             if (mmu.loadProcessIntoRAM(p)) {
                 // Process State is now READY to run
                 p.getPCB().setState(ProcessState.READY, clock);
                 p.setStartWaitingTime(clock);
                 scheduler.addProcess(p);
 
-                // remove the loaded process form the waiting list
+                // Remove the loaded process form the waiting list
                 processesToLoad.remove(p);
-                break;
+                // If one process should be loaded into RAM per tick `i--;` changes to `break;`
+                i--; // break;
             }
+        }
 
         // Get the next process to run from scheduler
         Process newProcess = scheduler.getNextProcess();

@@ -27,6 +27,6 @@ public abstract class Scheduler {
     }
     
     /* the getNextProcess() method should return the process that should
-     * be executed next by the CPU */
+     * be executed next by the CPU.CPU */
     public abstract Process getNextProcess();
 }

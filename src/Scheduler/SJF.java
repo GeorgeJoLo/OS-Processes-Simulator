@@ -37,18 +37,20 @@ public class SJF extends Scheduler {
     private void completionTimeBasedSorting() {
         Process[] temp = new Process[this.processes.size()];
         temp = this.processes.toArray(temp);
-        for (int i = 1; i < this.processes.size(); i++) {
-            for (int j = 1; j < this.processes.size() - i; j++) {
-                if (temp[j].getBurstTime() < temp[j-1].getBurstTime()) {
+
+        // Simple BubbleSort :))))))))))))))))))))))))))
+        for (int i = this.processes.size() - 1; i > 0; i--) {
+            for (int j = 0; j < i; j++) {
+                if (temp[j].getBurstTime() > temp[j+1].getBurstTime()) {
                     Process tmp = temp[j];
-                    temp[j] = temp[j-1];
-                    temp[j-1] = tmp;
+                    temp[j] = temp[j+1];
+                    temp[j+1] = tmp;
                 }
             }
         }
-        this.processes.clear();
-        for (Process process : temp) {
-            this.addProcess(process);
+
+        for (int i = 0; i < this.processes.size(); i++) {
+            this.processes.set(i, temp[i]);
         }
     }
 

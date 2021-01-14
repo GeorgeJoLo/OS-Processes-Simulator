@@ -44,6 +44,10 @@ public abstract class MemoryAllocationAlgorithm {
         int blockToPlaceProcess = allocateBlock(start);
         int blockStart = calculateBlockStart( blockToPlaceProcess);
         int blockEnd   = calculateBlockEnd( blockToPlaceProcess);
+
+        if (size == 0)
+            return new MemorySlot(start, start + size, blockStart , blockEnd);
+
         return new MemorySlot(start, start + size - 1, blockStart , blockEnd);
     }
 

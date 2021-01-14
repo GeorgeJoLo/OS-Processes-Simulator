@@ -67,7 +67,7 @@ public class MMU {
 
         // Auxiliary print
         if (fit) {
-            System.out.print("Process ID: " + p.getPCB().getPid() + " | ");
+            System.out.print("In Memory Process ID: " + p.getPCB().getPid() + " | ");
             printSlots();
         } else {
             System.out.println("Process ID: " + p.getPCB().getPid() + " could not fit.");
