@@ -6,7 +6,7 @@ public class Process {
     private int burstTime;
     private int memoryRequirements;
 
-    private int startWaitingTime = -1;
+    private int startWaitingTime = -1; // the time process loaded into RAM
     
     public Process(int arrivalTime, int burstTime, int memoryRequirements) {
         this.arrivalTime = arrivalTime;

@@ -10,7 +10,7 @@ public class PC {
         
         final Process[] processes = {
                 // Process.Process parameters are: arrivalTime, burstTime, memoryRequirements (kB)
-                new Process(1, 1, 10), //asdfasdf
+                new Process(0, 1, 10), //asdfasdf
                 new Process(2, 2, 40),
                 new Process(3, 1, 5),
                 new Process(4, 3, 20)

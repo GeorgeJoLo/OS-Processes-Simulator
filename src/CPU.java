@@ -3,6 +3,8 @@ import Scheduler.Scheduler;
 import Process.Process;
 import Process.ProcessState;
 
+import java.util.ArrayList;
+
 public class CPU {
 
     public static int clock = 0; // this should be incremented on every CPU cycle
@@ -12,10 +14,7 @@ public class CPU {
     private Process[] processes;
     private int currentProcess;
 
-    private Process[] newProcesses; // Processes that are not inserted into RAM yet
-    // Set the bounds of the processes in newProcesses and are not inserted into RAM yet
-    private int newProcessesStartIndex;
-    private int newProcessesEndIndex;
+    private ArrayList<Process> processesToLoad = new ArrayList<>(); // stores the process have arrived and not loaded
     
     public CPU(Scheduler scheduler, MMU mmu, Process[] processes) {
         this.scheduler = scheduler;
@@ -27,13 +26,8 @@ public class CPU {
         /* TODO: you need to add some code here
          * Hint: you need to run tick() in a loop, until there is nothing else to do... */
 
-        // Initialize the newProcesses and its indexes
-        newProcesses = new Process[processes.length];
-        newProcessesStartIndex = 0;
-        newProcessesEndIndex = 0;
-
         // Set the ID of the current (previously executed) process
-        currentProcess = 0;
+        currentProcess = 0; // processes IDs start from 1
 
         // Run tick until there are no processes left to run or fit into RAM
         while (!this.allProcessesTerminated()) {
@@ -66,51 +60,38 @@ public class CPU {
         System.out.println("Clock: " + clock);
 
         // Check which processes arrive at the current clock time
-        for (Process process : processes) {
-            if (process.getArrivalTime() == clock) {
-                newProcesses[newProcessesEndIndex] = process;
-                newProcessesEndIndex++;
-            }
-        }
+        for (Process process : processes)
+            if (process.getArrivalTime() == clock)
+                processesToLoad.add(process);
 
         // Get the previously run process and the new process to run
         Process previousProcess = this.findProcessById(currentProcess);
 
-        // If its the first process
-        if (previousProcess != null) {
-            // If the process is fully executed
-            if (previousProcess.getBurstTime() == 0) {
-                previousProcess.getPCB().setState(ProcessState.TERMINATED, clock);
-                scheduler.removeProcess(previousProcess);
-            }
+        // If its not the first process and previousProcess has terminated
+        if (previousProcess != null && previousProcess.getBurstTime() == 0) {
+            previousProcess.getPCB().setState(ProcessState.TERMINATED, clock);
+            scheduler.removeProcess(previousProcess);
         }
 
         // Check if all processes are TERMINATED
         if (this.allProcessesTerminated()){
-            System.out.println("NOOP");
-            System.out.println();
+            System.out.println("NOOP\n");
             return;
         }
 
         // Check if there are NEW processes (arrived now / could not fit into RAM previously)
-        if (newProcessesStartIndex != newProcessesEndIndex) {
-            // Pick the first NEW process that fits into RAM
-            for (int i = newProcessesStartIndex; i < newProcessesEndIndex; i++) {
-                if (mmu.loadProcessIntoRAM(newProcesses[i])) {
-                    // Process State is now READY to run
-                    newProcesses[i].getPCB().setState(ProcessState.READY, clock);
-                    newProcesses[i].setStartWaitingTime(clock);
-                    scheduler.addProcess(newProcesses[i]);
+        // Load the first process from the waiting list
+        for (Process p : processesToLoad)
+            if (mmu.loadProcessIntoRAM(p)) {
+                // Process State is now READY to run
+                p.getPCB().setState(ProcessState.READY, clock);
+                p.setStartWaitingTime(clock);
+                scheduler.addProcess(p);
 
-                    Process temp = newProcesses[i];
-                    newProcesses[i] = newProcesses[newProcessesStartIndex];
-                    newProcesses[newProcessesStartIndex] = temp;
-
-                    newProcessesStartIndex++;
-                    break;
-                }
+                // remove the loaded process form the waiting list
+                processesToLoad.remove(p);
+                break;
             }
-        }
 
         // Get the next process to run from scheduler
         Process newProcess = scheduler.getNextProcess();
@@ -122,7 +103,7 @@ public class CPU {
             return;
         }
 
-        // If its the first process
+        // Set the previousProcess state = READY
         if (
                 previousProcess != null
                 && newProcess != previousProcess
@@ -145,21 +126,16 @@ public class CPU {
      * Check if there are still processes left to RUN
      */
     private boolean allProcessesTerminated() {
-       for (Process process : processes) {
+       for (Process process : processes)
            if (process.getPCB().getState() != ProcessState.TERMINATED)
                return false;
-       }
-
        return true;
     }
 
     private Process findProcessById(int id) {
-        for (Process process : processes) {
-            if (process.getPCB().getPid() == id) {
+        for (Process process : processes)
+            if (process.getPCB().getPid() == id)
                 return process;
-            }
-        }
-
         return null;
     }
 }
