@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class PC {
     public static void main(String[] args) {
         ArrayList<Integer> pageRequests = new ArrayList<>(
-                Arrays.asList(4, 3, 1, 5, 1, 2, 3, 6, 7, 4, 2, 5, 6, 1, 3, 4)
+                Arrays.asList(4, 3, 1, 5, 1, 2, 3, 6, 7, 4, 2, 5, 6, 1, 3, 4, 7)
         );
         int memorySize = 4;
 

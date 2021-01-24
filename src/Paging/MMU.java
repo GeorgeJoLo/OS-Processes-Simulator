@@ -2,6 +2,7 @@ package Paging;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class MMU {
 
@@ -13,8 +14,21 @@ public class MMU {
         this.algorithm = algorithm;
 
         this.pageRequests = new ArrayList<>();
-        for (int id : pageRequests)
-            this.pageRequests.add(new Page(id));
+
+        for (int id : pageRequests){
+            boolean added = false;
+
+            for (Page page : this.pageRequests) {
+                if (page.id == id) {
+                    this.pageRequests.add(page);
+                    added = true;
+                    break;
+                }
+            }
+
+            if (!added)
+                this.pageRequests.add(new Page(id));
+        }
 
         this.memoryFrames = new Page[memorySize];
         Arrays.fill(memoryFrames, null);
