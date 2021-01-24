@@ -9,12 +9,12 @@ public class DiskScheduler {
     public static void main(String[] args) {
 
         ArrayList<Integer> sectorRequests = new ArrayList<>(
-                Arrays.asList(98, 183, 37, 122, 14, 124, 65, 67)
+                Arrays.asList(32, 67, 2, 188, 170, 40, 37, 55, 155, 199, 13, 107)
         );
 
         int start = 53;
 
-        ArrayList<Integer> path = CLOOK(sectorRequests, start, true);
+        ArrayList<Integer> path = SCAN(sectorRequests, start, 200, true);
 
         int count = 1;
         for (int point : path) {
@@ -70,7 +70,9 @@ public class DiskScheduler {
             if (up) point++;
             else point--;
         }
-        visited.add(up?size-1:0);
+
+        if (!visited.contains(up?size-1:0))
+            visited.add(up?size-1:0);
 
         while (point != (up?-1:size)) {
             if (requests.contains(point) && !visited.contains(point))
@@ -97,9 +99,11 @@ public class DiskScheduler {
             else point--;
         }
 
-        visited.add(up?size-1:0);
+        if (!visited.contains(up?size-1:0))
+            visited.add(up?size-1:0);
         point = up?0:size-1;
-        visited.add(point);
+        if (!visited.contains(point))
+            visited.add(point);
 
         while (point != (up?size:-1)) {
             if (requests.contains(point) && !visited.contains(point))
