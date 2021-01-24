@@ -8,9 +8,9 @@ public class PC {
         ArrayList<Integer> pageRequests = new ArrayList<>(
                 Arrays.asList(1, 2, 3, 4, 2, 1, 5, 6, 2, 1, 2, 3, 7, 6, 3, 2, 1, 2, 3, 6)
         );
-        int memorySize = 7;
+        int memorySize = 4;
 
-        ReplacementPolicy algorithm = new Optimal(pageRequests);
+        ReplacementPolicy algorithm = new LRU(pageRequests);
         MMU mmu = new MMU(algorithm, pageRequests, memorySize);
         mmu.handleRequests();
     }
