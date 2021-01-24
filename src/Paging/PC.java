@@ -6,11 +6,11 @@ import java.util.Arrays;
 public class PC {
     public static void main(String[] args) {
         ArrayList<Integer> pageRequests = new ArrayList<>(
-                Arrays.asList(4, 3, 1, 5, 1, 2, 3, 6, 7, 4, 2, 5, 6, 1, 3, 4, 7)
+                Arrays.asList(1, 2, 3, 4, 2, 1, 5, 6, 2, 1, 2, 3, 7, 6, 3, 2, 1, 2, 3, 6)
         );
-        int memorySize = 4;
+        int memorySize = 7;
 
-        ReplacementPolicy algorithm = new LRU(pageRequests);
+        ReplacementPolicy algorithm = new Optimal(pageRequests);
         MMU mmu = new MMU(algorithm, pageRequests, memorySize);
         mmu.handleRequests();
     }
