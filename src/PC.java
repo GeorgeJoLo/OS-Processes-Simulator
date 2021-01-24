@@ -13,19 +13,24 @@ public class PC {
         
         final Process[] processes = {
                 // Process.Process parameters are: arrivalTime, burstTime, memoryRequirements (kB)
-                new Process(1, 1, 10),
-                new Process(3, 2, 40),
-                new Process(4, 1, 5),
-                new Process(5, 3, 20)
+//                new Process(1, 1, 10),
+//                new Process(3, 2, 40),
+//                new Process(4, 1, 5),
+//                new Process(5, 3, 20)
+
+                new Process(1, 8 , 0),
+                new Process(1, 4 , 0),
+                new Process(3, 9 , 0),
+                new Process(4, 5 , 0),
         };
 
         final int[] availableBlockSizes = {15, 45, 5, 10, 20}; // sizes in kB
 
-        MemoryAllocationAlgorithm algorithm = new BestFit(availableBlockSizes);
+        MemoryAllocationAlgorithm algorithm = new FirstFit(availableBlockSizes);
 
         MMU mmu = new MMU(availableBlockSizes, algorithm);
 
-        Scheduler scheduler = new RoundRobin(2);
+        Scheduler scheduler = new RoundRobin();
 
         CPU cpu = new CPU(scheduler, mmu, processes);
         cpu.run();

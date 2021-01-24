@@ -37,6 +37,10 @@ public class CPU {
             clock++;
         }
 
+        int totalResponseTime = 0;
+        int totalWaitingTime = 0;
+        int totalTurnAroundTime = 0;
+
         // Print the statistics for each process
         for (Process process : processes) {
             if (process.getPCB().getStartTimes().isEmpty()) {
@@ -47,12 +51,23 @@ public class CPU {
             System.out.println("Process: " + process.getPCB().getPid());
 
             System.out.println("\tResponse Time: " + process.getResponseTime());
+            totalResponseTime += process.getResponseTime();
 
             System.out.println("\tWaiting Time: " + process.getWaitingTime());
+            totalWaitingTime += process.getWaitingTime();
 
             System.out.println("\tTurn around Time: " + process.getTurnAroundTime());
+            totalTurnAroundTime += process.getTurnAroundTime();
 
         }
+
+        System.out.println();
+        System.out.println("===========================================");
+        System.out.println();
+
+        System.out.println("Average Response Time: " + (totalResponseTime / (float) processes.length));
+        System.out.println("Average Waiting Time: " + (totalWaitingTime / (float) processes.length));
+        System.out.println("Average Turn around Time: " + (totalTurnAroundTime / (float) processes.length));
 
         // Reset clock at the end of the cpu run so tests can run properly
         clock = 0;

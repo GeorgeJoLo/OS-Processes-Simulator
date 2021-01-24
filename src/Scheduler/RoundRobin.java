@@ -63,11 +63,6 @@ public class RoundRobin extends Scheduler {
             runningProcess = this.processes.get(0);
         }
 
-        for (Process process : this.processes) {
-            System.out.print(process.getPCB().getPid() + ", ");
-        }
-        System.out.println();
-
         // Return the process at the front of the queue
         return this.processes.get(0);
     }
