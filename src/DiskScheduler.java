@@ -9,12 +9,12 @@ public class DiskScheduler {
     public static void main(String[] args) {
 
         ArrayList<Integer> sectorRequests = new ArrayList<>(
-                Arrays.asList(32, 67, 2, 188, 170, 40, 37, 55, 155, 199, 13, 107)
+                Arrays.asList(188, 37, 147, 104, 129, 63, 134, 11, 100, 19)
         );
 
-        int start = 53;
+        int start = 157;
 
-        ArrayList<Integer> path = SCAN(sectorRequests, start, 200, true);
+        ArrayList<Integer> path = CLOOK(sectorRequests, start, true);
 
         int count = 1;
         for (int point : path) {
@@ -61,25 +61,29 @@ public class DiskScheduler {
         ArrayList<Integer> visited = new ArrayList<>();
         visited.add(start);
 
-        int point = start;
+        int pointer = start;
 
-        while (point != (up?size:-1)) {
-            if (requests.contains(point) && !visited.contains(point))
-                visited.add(point);
+        while (pointer != (up?size:-1)) {
+            if (requests.contains(pointer) && !visited.contains(pointer))
+                visited.add(pointer);
 
-            if (up) point++;
-            else point--;
+            if (up) pointer++;
+            else pointer--;
         }
+
+        if (requests.size() + 1 == visited.size())
+            return visited;
 
         if (!visited.contains(up?size-1:0))
             visited.add(up?size-1:0);
 
-        while (point != (up?-1:size)) {
-            if (requests.contains(point) && !visited.contains(point))
-                visited.add(point);
+        while (pointer != (up?-1:size)) {
+            if (requests.contains(pointer) && !visited.contains(pointer)) {
+                visited.add(pointer);
+            }
 
-            if (up) point--;
-            else point++;
+            if (up) pointer--;
+            else pointer++;
         }
 
         return visited;
@@ -98,6 +102,9 @@ public class DiskScheduler {
             if (up) point++;
             else point--;
         }
+
+        if (requests.size() + 1 == visited.size())
+            return visited;
 
         if (!visited.contains(up?size-1:0))
             visited.add(up?size-1:0);
@@ -129,6 +136,9 @@ public class DiskScheduler {
             if (up) point++;
             else point--;
         }
+
+        if (requests.size() + 1 == visited.size())
+            return visited;
 
         point = up?min(requests):max(requests);
 

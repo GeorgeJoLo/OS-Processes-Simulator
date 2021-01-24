@@ -18,10 +18,11 @@ public class PC {
 //                new Process(4, 1, 5),
 //                new Process(5, 3, 20)
 
-                new Process(0, 8 , 0),
-                new Process(1, 4 , 0),
-                new Process(3, 9 , 0),
-                new Process(4, 5 , 0),
+                new Process(11, 3 , 0),
+                new Process(0, 7 , 0),
+                new Process(10, 1 , 0),
+                new Process(3, 6 , 0),
+                new Process(7, 5 , 0)
         };
 
         final int[] availableBlockSizes = {15, 45, 5, 10, 20}; // sizes in kB
@@ -30,7 +31,7 @@ public class PC {
 
         MMU mmu = new MMU(availableBlockSizes, algorithm);
 
-        Scheduler scheduler = new SRTF();
+        Scheduler scheduler = new RoundRobin(2);
 
         CPU cpu = new CPU(scheduler, mmu, processes);
         cpu.run();
